@@ -1,7 +1,4 @@
-const { rows } = require('pg/lib/defaults');
-const { getAllProperties } = require('./server/database');
+const { getAllReservations } = require('./server/database');
 
 
-const options = {};
-
-getAllProperties(options).then(res => console.log(res));
+getAllReservations(2).then(res => console.log(res));

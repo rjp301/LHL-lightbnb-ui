@@ -17,8 +17,8 @@ console.log(pool);
  */
 const getUserWithEmail = function (email) {
   const queryString = `
-  SELECT * FROM users
-  WHERE email = $1;`;
+SELECT * FROM users
+WHERE email = $1;`;
   const queryValues = [email];
   return pool.query(queryString, queryValues)
     .then(res => res.rows[0])
@@ -33,8 +33,8 @@ exports.getUserWithEmail = getUserWithEmail;
  */
 const getUserWithId = function (id) {
   const queryString = `
-  SELECT * FROM users
-  WHERE id = $1;`;
+SELECT * FROM users
+WHERE id = $1;`;
   const queryValues = [id];
   return pool.query(queryString, queryValues)
     .then(res => res.rows[0])
@@ -49,9 +49,9 @@ exports.getUserWithId = getUserWithId;
  */
 const addUser = function (user) {
   const queryString = `
-  INSERT INTO users (name,email,password)
-  VALUES ($1,$2,$3)
-  RETURNING *;`;
+INSERT INTO users (name,email,password)
+VALUES ($1,$2,$3)
+RETURNING *;`;
   const queryValues = [user.name, user.email, user.password];
   return pool.query(queryString, queryValues)
     .then(res => res.rows[0])
@@ -68,12 +68,16 @@ exports.addUser = addUser;
  */
 const getAllReservations = function (guest_id, limit = 10) {
   const queryString = `
-  SELECT * FROM reservations
-  WHERE guest_id = $1
-  LIMIT $2;`;
+SELECT * FROM reservations
+JOIN properties ON reservations.property_id = properties.id
+WHERE reservations.guest_id = $1
+LIMIT $2;`;
   const queryValues = [guest_id, limit];
   return pool.query(queryString, queryValues)
-    .then(res => res.rows)
+    .then(res => {
+      console.log(res.rows);
+      return res.rows;
+    })
     .catch(err => console.error(err.stack));
 };
 exports.getAllReservations = getAllReservations;
